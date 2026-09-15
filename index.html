@@ -3,171 +3,459 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pro Slide Color Changer</title>
+    <title>Luxury HD Color Engine (Animated)</title>
+    
+    <!-- PDF Processing Libraries -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    
     <style>
-        body { font-family: Arial, sans-serif; text-align: center; background: #f4f4f9; padding: 20px; }
-        .container { background: white; padding: 30px; border-radius: 10px; max-width: 800px; margin: auto; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
-        .controls { margin: 15px 0; background: #e9ecef; padding: 15px; border-radius: 8px; text-align: left; }
-        input[type="file"], input[type="color"] { cursor: pointer; }
-        input[type="range"] { width: 100%; cursor: pointer; }
-        .slider-group { margin-bottom: 15px; }
-        canvas { max-width: 100%; border: 2px dashed #ccc; cursor: crosshair; margin-top: 20px; border-radius: 5px; display: none; }
-        h3 { margin-top: 0; color: #333; }
-        .help-text { color: #d9534f; font-weight: bold; margin-bottom: 10px; text-align: center;}
-        .btn-group { margin-top: 20px; display: flex; justify-content: center; gap: 10px; }
-        button { background-color: #28a745; color: white; border: none; padding: 10px 20px; font-size: 16px; border-radius: 5px; cursor: pointer; font-weight: bold; display: none; }
-        button:hover { background-color: #218838; }
+        :root {
+            --bg-dark: #050b14;
+            --glass-bg: rgba(15, 23, 42, 0.6);
+            --gold: #d4af37;
+            --gold-glow: rgba(212, 175, 55, 0.4);
+            --text-light: #f8fafc;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--text-light);
+            min-height: 100vh;
+            margin: 0;
+            padding: 40px 20px;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            overflow-x: hidden; /* Scrollbar hatane ke liye */
+            position: relative;
+        }
+
+        /* 🌟 NEW: Ambient Glowing Floating Orbs Animation 🌟 */
+        .bg-orb {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(120px);
+            z-index: -1;
+            animation: floatOrb 20s infinite ease-in-out alternate;
+        }
+        
+        .orb-1 {
+            width: 500px; height: 500px;
+            background: rgba(212, 175, 55, 0.25); /* Gold Glow */
+            top: -10%; left: -10%;
+        }
+        
+        .orb-2 {
+            width: 600px; height: 600px;
+            background: rgba(30, 64, 175, 0.25); /* Deep Blue Glow */
+            bottom: -20%; right: -10%;
+            animation-duration: 25s;
+            animation-delay: -5s;
+        }
+        
+        .orb-3 {
+            width: 400px; height: 400px;
+            background: rgba(139, 92, 246, 0.15); /* Purple Glow */
+            top: 40%; left: 40%;
+            animation-duration: 30s;
+            animation-delay: -10s;
+        }
+
+        @keyframes floatOrb {
+            0% { transform: translate(0, 0) scale(1); }
+            50% { transform: translate(60px, 120px) scale(1.2); }
+            100% { transform: translate(-60px, -50px) scale(0.9); }
+        }
+
+        /* Container Glassmorphism Update */
+        .container {
+            background: var(--glass-bg);
+            backdrop-filter: blur(25px); /* Jada blur luxury feel ke liye */
+            -webkit-backdrop-filter: blur(25px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            padding: 40px;
+            border-radius: 20px;
+            max-width: 900px;
+            width: 100%;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5), inset 0 0 0 1px rgba(255,255,255,0.05);
+            animation: fadeIn 1.2s cubic-bezier(0.22, 1, 0.36, 1);
+            z-index: 10;
+        }
+
+        h2 {
+            text-align: center;
+            color: var(--gold);
+            font-weight: 300;
+            letter-spacing: 2px;
+            margin-bottom: 30px;
+            text-transform: uppercase;
+            text-shadow: 0 0 15px rgba(212, 175, 55, 0.4);
+        }
+
+        .controls {
+            background: rgba(0, 0, 0, 0.4);
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 25px;
+            border-left: 4px solid var(--gold);
+            transition: transform 0.4s ease, box-shadow 0.4s ease;
+        }
+        
+        .controls:hover { 
+            transform: translateY(-5px); 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+        }
+
+        h3 { margin-top: 0; font-size: 16px; color: #cbd5e1; font-weight: 500; }
+        label { font-size: 14px; color: #94a3b8; display: block; margin-top: 10px; }
+
+        input[type="file"], input[type="color"], input[type="range"] {
+            width: 100%;
+            margin-top: 5px;
+            cursor: pointer;
+            accent-color: var(--gold);
+        }
+
+        input[type="file"]::file-selector-button {
+            background: var(--gold);
+            color: #000;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        input[type="file"]::file-selector-button:hover {
+            box-shadow: 0 0 20px var(--gold-glow);
+            transform: scale(1.05);
+        }
+
+        .canvas-container { text-align: center; margin-top: 20px; }
+        
+        canvas {
+            max-width: 100%;
+            border: 2px dashed rgba(212, 175, 55, 0.5);
+            border-radius: 10px;
+            cursor: crosshair;
+            display: none;
+            transition: all 0.4s ease;
+        }
+        canvas:hover { 
+            border-color: var(--gold); 
+            box-shadow: 0 0 40px var(--gold-glow);
+            transform: scale(1.01);
+        }
+
+        .pulse-text {
+            color: var(--gold);
+            animation: pulseGlow 2s infinite;
+        }
+
+        @keyframes pulseGlow {
+            0% { opacity: 0.8; text-shadow: 0 0 5px transparent; }
+            50% { opacity: 1; text-shadow: 0 0 15px var(--gold); transform: scale(1.02); }
+            100% { opacity: 0.8; text-shadow: 0 0 5px transparent; }
+        }
+
+        .btn-action {
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(45deg, var(--gold), #f3e5ab);
+            color: #000;
+            border: none;
+            padding: 15px 30px;
+            font-size: 18px;
+            font-weight: bold;
+            border-radius: 30px;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 20px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 0 5px 15px var(--gold-glow);
+            transition: all 0.3s ease;
+            display: none;
+        }
+        
+        .btn-action::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -150%;
+            width: 150%;
+            height: 200%;
+            background: rgba(255, 255, 255, 0.4);
+            transform: rotate(45deg);
+            animation: shineSweep 3s infinite;
+        }
+
+        @keyframes shineSweep {
+            0% { left: -150%; }
+            20% { left: 150%; }
+            100% { left: 150%; }
+        }
+
+        .btn-action:hover {
+            transform: scale(1.03);
+            box-shadow: 0 10px 30px rgba(212, 175, 55, 0.6);
+        }
+
+        .btn-download {
+            background: linear-gradient(45deg, #10b981, #34d399); 
+            box-shadow: 0 5px 15px rgba(16, 185, 129, 0.4);
+        }
+        .btn-download:hover { box-shadow: 0 10px 30px rgba(16, 185, 129, 0.6); }
+
+        #progressContainer {
+            display: none;
+            text-align: center;
+            margin-top: 20px;
+            color: var(--gold);
+            font-weight: bold;
+        }
+        
+        .spinner {
+            border: 4px solid rgba(255,255,255,0.05);
+            border-top: 4px solid var(--gold);
+            border-radius: 50%;
+            width: 45px;
+            height: 45px;
+            animation: spin 1s cubic-bezier(0.68, -0.55, 0.265, 1.55) infinite;
+            margin: 0 auto 15px auto;
+        }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
     </style>
 </head>
 <body>
 
+    <!-- Animated Background Orbs -->
+    <div class="bg-orb orb-1"></div>
+    <div class="bg-orb orb-2"></div>
+    <div class="bg-orb orb-3"></div>
+
     <div class="container">
-        <h2>Pro Slide Color Changer</h2>
+        <h2>✨ Background color</h2>
 
         <div class="controls">
-            <h3>Step 1: Upload Image</h3>
-            <input type="file" id="uploadInput" accept="image/*">
+            <h3>1. Upload PDF or Image</h3>
+            <input type="file" id="uploadFile" accept="image/*, application/pdf">
         </div>
 
-        <div class="controls">
-            <h3>Step 2: Adjust Settings</h3>
+        <div class="controls" id="settingsPanel" style="display: none;">
+            <h3>2. Settings (HD Mode Active)</h3>
             
-            <div class="slider-group">
-                <label><b>1. Naya Color Chunein:</b></label>
-                <input type="color" id="newColorPicker" value="#b30000">
-            </div>
-
-            <div class="slider-group">
-                <label><b>2. Tolerance:</b> (Kitna milta-julta rang badalna hai)</label>
-                <input type="range" id="toleranceSlider" min="0" max="150" value="20">
-            </div>
-
-            <div class="slider-group">
-                <label><b>3. Smooth Edges (Kinaare theek karne ke liye):</b> (Text ke safed daag hatane ke liye isko badhayein)</label>
-                <input type="range" id="featherSlider" min="0" max="150" value="60">
+            <label>Naya Background Color:</label>
+            <input type="color" id="newColorPicker" value="#b30000">
+            
+            <label>Tolerance (Rang milane ki power):</label>
+            <input type="range" id="toleranceSlider" min="0" max="150" value="30">
+            
+            <div id="imageSettings" style="display:none;">
+                <label>Smooth Edges (Kinare theek karne ke liye):</label>
+                <input type="range" id="featherSlider" min="0" max="150" value="10">
             </div>
         </div>
 
-        <p class="help-text" id="instructionText" style="display:none;">
-            👉 Step 3: Niche photo mein us color par CLICK karein jise aap badalna chahte hain!
-        </p>
-
-        <!-- Buttons -->
-        <div class="btn-group">
-            <button id="downloadBtn">⬇️ Download HD Image</button>
+        <div class="canvas-container">
+            <p id="instructionText" class="pulse-text" style="display:none;">
+                👇 <b>Step 3:</b> Niche Preview mein us PURANE rang par click karein jise hatana hai!
+            </p>
+            <canvas id="mainCanvas"></canvas>
         </div>
 
-        <!-- Image Canvas -->
-        <canvas id="imageCanvas"></canvas>
+        <button class="btn-action" id="processPdfBtn">Generate HD PDF</button>
+        <button class="btn-action btn-download" id="downloadImgBtn">⬇️ Download HD Image</button>
+
+        <div id="progressContainer">
+            <div class="spinner"></div>
+            <p id="progressText">Processing Premium Request...</p>
+        </div>
     </div>
 
     <script>
-        const uploadInput = document.getElementById('uploadInput');
-        const canvas = document.getElementById('imageCanvas');
-        const ctx = canvas.getContext('2d');
-        const newColorPicker = document.getElementById('newColorPicker');
-        const toleranceSlider = document.getElementById('toleranceSlider');
-        const featherSlider = document.getElementById('featherSlider');
-        const instructionText = document.getElementById('instructionText');
-        const downloadBtn = document.getElementById('downloadBtn');
+        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.worker.min.js';
 
+        let currentMode = ''; 
         let originalImage = new Image();
         let originalImageData = null;
+        let pdfDocument = null;
+        let targetColor = null; 
 
-        // Image Load Handle
-        uploadInput.addEventListener('change', function(e) {
-            const file = e.target.files[0];
-            if (!file) return;
-
-            const reader = new FileReader();
-            reader.onload = function(event) {
-                originalImage.onload = function() {
-                    // Original Resolution barkarar rakhein
-                    canvas.width = originalImage.width;
-                    canvas.height = originalImage.height;
-                    
-                    ctx.drawImage(originalImage, 0, 0);
-                    originalImageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-                    
-                    canvas.style.display = "block";
-                    instructionText.style.display = "block";
-                    // Reset download button on new image
-                    downloadBtn.style.display = "none";
-                };
-                originalImage.src = event.target.result;
-            };
-            reader.readAsDataURL(file);
-        });
+        const uploadFile = document.getElementById('uploadFile');
+        const mainCanvas = document.getElementById('mainCanvas');
+        const ctx = mainCanvas.getContext('2d');
+        const processPdfBtn = document.getElementById('processPdfBtn');
+        const downloadImgBtn = document.getElementById('downloadImgBtn');
+        const settingsPanel = document.getElementById('settingsPanel');
+        const imageSettings = document.getElementById('imageSettings');
+        const instructionText = document.getElementById('instructionText');
+        const progressContainer = document.getElementById('progressContainer');
 
         function hexToRgb(hex) {
             const bigint = parseInt(hex.slice(1), 16);
             return [(bigint >> 16) & 255, (bigint >> 8) & 255, bigint & 255];
         }
 
-        // Color Replacement Logic
-        canvas.addEventListener('click', function(e) {
-            if (!originalImageData) return;
+        uploadFile.addEventListener('change', async (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
 
-            // Reset to original before applying new color
-            ctx.putImageData(originalImageData, 0, 0);
-            const currentImageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-            const data = currentImageData.data;
+            processPdfBtn.style.display = 'none';
+            downloadImgBtn.style.display = 'none';
+            targetColor = null;
 
-            // Find clicked pixel coordinates
-            const rect = canvas.getBoundingClientRect();
-            const scaleX = canvas.width / rect.width;
-            const scaleY = canvas.height / rect.height;
+            settingsPanel.style.animation = 'none';
+            setTimeout(() => settingsPanel.style.animation = 'fadeIn 0.6s ease-out', 10);
+
+            if (file.type === "application/pdf") {
+                currentMode = 'pdf';
+                imageSettings.style.display = 'none'; 
+                const fileReader = new FileReader();
+                fileReader.onload = async function() {
+                    const typedarray = new Uint8Array(this.result);
+                    pdfDocument = await pdfjsLib.getDocument(typedarray).promise;
+                    
+                    const page = await pdfDocument.getPage(1);
+                    const viewport = page.getViewport({ scale: 2.0 }); 
+                    mainCanvas.width = viewport.width;
+                    mainCanvas.height = viewport.height;
+                    
+                    await page.render({ canvasContext: ctx, viewport: viewport }).promise;
+                    
+                    mainCanvas.style.display = "inline-block";
+                    settingsPanel.style.display = "block";
+                    instructionText.style.display = "block";
+                };
+                fileReader.readAsArrayBuffer(file);
+            } 
+            else if (file.type.startsWith("image/")) {
+                currentMode = 'image';
+                imageSettings.style.display = 'block'; 
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    originalImage.onload = function() {
+                        mainCanvas.width = originalImage.width;
+                        mainCanvas.height = originalImage.height;
+                        ctx.drawImage(originalImage, 0, 0);
+                        originalImageData = ctx.getImageData(0, 0, mainCanvas.width, mainCanvas.height);
+                        
+                        mainCanvas.style.display = "inline-block";
+                        settingsPanel.style.display = "block";
+                        instructionText.style.display = "block";
+                    };
+                    originalImage.src = event.target.result;
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        mainCanvas.addEventListener('click', function(e) {
+            const rect = mainCanvas.getBoundingClientRect();
+            const scaleX = mainCanvas.width / rect.width;
+            const scaleY = mainCanvas.height / rect.height;
             const x = Math.floor((e.clientX - rect.left) * scaleX);
             const y = Math.floor((e.clientY - rect.top) * scaleY);
 
-            // Get target color
-            const clickPos = (y * canvas.width + x) * 4;
-            const targetR = data[clickPos];
-            const targetG = data[clickPos + 1];
-            const targetB = data[clickPos + 2];
+            if (currentMode === 'pdf') {
+                const pixelData = ctx.getImageData(x, y, 1, 1).data;
+                targetColor = [pixelData[0], pixelData[1], pixelData[2]];
+                processPdfBtn.style.display = "block";
+                instructionText.innerHTML = "✅ Rang select ho gaya! Ab <b>'Generate HD PDF'</b> dabayein.";
+                instructionText.style.animation = 'none'; 
+            } 
+            else if (currentMode === 'image') {
+                if (!originalImageData) return;
+                ctx.putImageData(originalImageData, 0, 0);
+                const currentImageData = ctx.getImageData(0, 0, mainCanvas.width, mainCanvas.height);
+                const data = currentImageData.data;
 
-            const newRgb = hexToRgb(newColorPicker.value);
-            const tolerance = parseInt(toleranceSlider.value);
-            const feather = parseInt(featherSlider.value);
+                const clickPos = (y * mainCanvas.width + x) * 4;
+                const tR = data[clickPos], tG = data[clickPos + 1], tB = data[clickPos + 2];
+                const newRgb = hexToRgb(document.getElementById('newColorPicker').value);
+                const tolerance = parseInt(document.getElementById('toleranceSlider').value);
+                const feather = parseInt(document.getElementById('featherSlider').value);
 
-            // Replace colors with Edge Smoothing (Anti-aliasing fix)
-            for (let i = 0; i < data.length; i += 4) {
-                const r = data[i];
-                const g = data[i + 1];
-                const b = data[i + 2];
+                for (let i = 0; i < data.length; i += 4) {
+                    const r = data[i], g = data[i + 1], b = data[i + 2];
+                    const dist = Math.sqrt((r - tR)**2 + (g - tG)**2 + (b - tB)**2);
 
-                const distance = Math.sqrt(
-                    Math.pow(r - targetR, 2) + 
-                    Math.pow(g - targetG, 2) + 
-                    Math.pow(b - targetB, 2)
-                );
-
-                if (distance <= tolerance) {
-                    // Fully replace color
-                    data[i] = newRgb[0];
-                    data[i + 1] = newRgb[1];
-                    data[i + 2] = newRgb[2];
-                } else if (feather > 0 && distance <= tolerance + feather) {
-                    // Smoothly blend the edges
-                    const mix = (distance - tolerance) / feather; // 0 to 1
-                    data[i] = Math.round(r * mix + newRgb[0] * (1 - mix));
-                    data[i + 1] = Math.round(g * mix + newRgb[1] * (1 - mix));
-                    data[i + 2] = Math.round(b * mix + newRgb[2] * (1 - mix));
+                    if (dist <= tolerance) {
+                        data[i] = newRgb[0]; data[i+1] = newRgb[1]; data[i+2] = newRgb[2];
+                    } else if (feather > 0 && dist <= tolerance + feather) {
+                        const mix = (dist - tolerance) / feather;
+                        data[i] = Math.round(r * mix + newRgb[0] * (1 - mix));
+                        data[i+1] = Math.round(g * mix + newRgb[1] * (1 - mix));
+                        data[i+2] = Math.round(b * mix + newRgb[2] * (1 - mix));
+                    }
                 }
+                ctx.putImageData(currentImageData, 0, 0);
+                downloadImgBtn.style.display = "block";
+                instructionText.innerHTML = "✅ Background Change ho gaya! Niche se download karein.";
+                instructionText.style.animation = 'none'; 
             }
-
-            ctx.putImageData(currentImageData, 0, 0);
-            
-            // Show download button after successful change
-            downloadBtn.style.display = "block";
         });
 
-        // High Quality Download
-        downloadBtn.addEventListener('click', function() {
+        processPdfBtn.addEventListener('click', async () => {
+            if (!pdfDocument || !targetColor) return;
+            processPdfBtn.disabled = true;
+            progressContainer.style.display = "block";
+            const progressText = document.getElementById('progressText');
+
+            const { jsPDF } = window.jspdf;
+            let finalPdf = null;
+            const newRgb = hexToRgb(document.getElementById('newColorPicker').value);
+            const tolerance = parseInt(document.getElementById('toleranceSlider').value);
+
+            try {
+                for (let i = 1; i <= pdfDocument.numPages; i++) {
+                    progressText.innerText = `Luxury Engine Working... Page ${i} of ${pdfDocument.numPages} ⏳`;
+                    
+                    const hiddenCanvas = document.createElement('canvas');
+                    const hiddenCtx = hiddenCanvas.getContext('2d');
+                    
+                    const page = await pdfDocument.getPage(i);
+                    const viewport = page.getViewport({ scale: 3.0 }); 
+                    hiddenCanvas.width = viewport.width;
+                    hiddenCanvas.height = viewport.height;
+                    await page.render({ canvasContext: hiddenCtx, viewport: viewport }).promise;
+                    
+                    const imageData = hiddenCtx.getImageData(0, 0, hiddenCanvas.width, hiddenCanvas.height);
+                    const data = imageData.data;
+                    for (let j = 0; j < data.length; j += 4) {
+                        const r = data[j], g = data[j+1], b = data[j+2];
+                        if (Math.sqrt((r - targetColor[0])**2 + (g - targetColor[1])**2 + (b - targetColor[2])**2) <= tolerance) {
+                            data[j] = newRgb[0]; data[j+1] = newRgb[1]; data[j+2] = newRgb[2];
+                        }
+                    }
+                    hiddenCtx.putImageData(imageData, 0, 0);
+                    
+                    const imgData = hiddenCanvas.toDataURL('image/jpeg', 1.0); 
+                    if (i === 1) {
+                        finalPdf = new jsPDF(viewport.width > viewport.height ? 'l' : 'p', 'px', [viewport.width, viewport.height]);
+                    } else {
+                        finalPdf.addPage([viewport.width, viewport.height], viewport.width > viewport.height ? 'l' : 'p');
+                    }
+                    finalPdf.addImage(imgData, 'JPEG', 0, 0, viewport.width, viewport.height);
+                }
+                progressText.innerText = "🎉 HD PDF Taiyar Hai! Downloading...";
+                finalPdf.save('Premium-Modified-Slides.pdf');
+            } catch (error) {
+                alert("Error! PDF thodi badi hai, page refresh karke dobara try karein.");
+            } finally {
+                processPdfBtn.disabled = false;
+                progressContainer.style.display = "none";
+            }
+        });
+
+        downloadImgBtn.addEventListener('click', function() {
             const link = document.createElement('a');
-            link.download = 'modified-slide.png';
-            // Use image/png for lossless maximum quality (no pixelation)
-            link.href = canvas.toDataURL('image/png');
+            link.download = 'Premium-Modified-Image.png';
+            link.href = mainCanvas.toDataURL('image/png'); 
             link.click();
         });
     </script>
