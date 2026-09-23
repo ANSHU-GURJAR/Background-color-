@@ -120,12 +120,22 @@
         .zoom-btn { background: transparent; border: none; color: var(--gold); font-size: 20px; cursor: pointer; font-weight: bold; transition: transform 0.2s; }
         .zoom-btn:hover { transform: scale(1.3); }
         
+        /* UPDATED WRAPPER AND CENTERING ENGINE */
         .canvas-wrapper { 
             width: 100%; height: 550px; overflow: auto; 
             border: 2px dashed rgba(212, 175, 55, 0.4); border-radius: 12px; 
-            background: rgba(0,0,0,0.8); text-align: center; position: relative; /* Center aligned */
+            background: rgba(0,0,0,0.8); text-align: center; /* Horizontally centers inline elements */
+            padding: 20px; box-sizing: border-box; position: relative;
             box-shadow: inset 0 0 30px rgba(0,0,0,0.8); 
         }
+        
+        #innerCanvasContainer {
+            position: relative; display: none; margin: 0 auto; 
+            box-shadow: 0 0 20px rgba(0,0,0,0.5); overflow: hidden;
+            border-radius: 4px;
+        }
+
+        canvas { display: block; width: 100%; height: 100%; cursor: crosshair; }
         
         #scannerLine {
             position: absolute; top: -100%; left: 0; width: 100%; height: 100%;
@@ -135,15 +145,6 @@
         }
         .scanning { animation: scanAnim 0.8s cubic-bezier(0.25, 1, 0.5, 1); }
         @keyframes scanAnim { 0% { top: -100%; opacity: 0; } 10% { opacity: 1; } 80% { top: 0%; opacity: 1; } 100% { top: 10%; opacity: 0; } }
-
-        /* PERFECT CENTERING AND ZOOMING */
-        canvas { 
-            transform-origin: top center; /* Origin ab center se hoga */
-            transition: transform 0.2s ease; 
-            display: none; 
-            margin: 0 auto; /* Image wrapper ke center mein fix rahegi */
-            cursor: crosshair; 
-        }
         
         .pulse-text { color: var(--gold); font-size: 15px; letter-spacing: 0.5px; }
 
@@ -258,14 +259,17 @@
                 </div>
             </div>
 
+            <!-- NEW PERFECT CENTER WRAPPER -->
             <div class="canvas-wrapper" id="canvasWrapper">
-                <div id="scannerLine"></div>
-                <canvas id="mainCanvas"></canvas>
+                <div id="innerCanvasContainer">
+                    <div id="scannerLine"></div>
+                    <canvas id="mainCanvas"></canvas>
+                </div>
             </div>
         </div>
 
         <div class="btn-group">
-            <button class="btn-action btn-reset" id="resetBtn">🔄 Restart</button>
+            <button class="btn-action btn-reset" id="resetBtn">📁 Upload New</button>
             <button class="btn-action btn-main" id="processPdfBtn">📄 Generate HD PDF</button>
             <button class="btn-action btn-download" id="downloadImgBtn">⬇️ Save Image</button>
         </div>
@@ -278,7 +282,7 @@
     <script>
         pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.worker.min.js';
 
-        const APP_PASSWORD = "kuchu puchu"; 
+        const APP_PASSWORD = "admin"; 
         document.getElementById('loginBtn').addEventListener('click', checkLogin);
         document.getElementById('passInput').addEventListener('keypress', function(e) { if(e.key === 'Enter') checkLogin(); });
         function checkLogin() {
@@ -307,7 +311,6 @@
         let cachedBgData = null; 
         let pdfDocument = null;
         let targetColors = []; 
-        let maskBuffer1x = null; 
         let maskBuffer = null; 
         let currentTool = 'clicker';
         let isDrawing = false;
@@ -324,6 +327,7 @@
         const ctx = mainCanvas.getContext('2d', {willReadFrequently: true});
         const scannerLine = document.getElementById('scannerLine');
         const instructionText = document.getElementById('instructionText');
+        const innerContainer = document.getElementById('innerCanvasContainer');
 
         function hexToRgb(hex) {
             const bigint = parseInt(hex.slice(1), 16);
@@ -338,18 +342,23 @@
             });
         });
 
+        // TRUE DIMENSIONAL ZOOM (Fixes Scrollbar & Corner issues)
         document.getElementById('zoomIn').addEventListener('click', () => setZoom(zoomScale + 0.25));
         document.getElementById('zoomOut').addEventListener('click', () => setZoom(zoomScale - 0.25));
         
         function setZoom(newScale) {
-            zoomScale = Math.max(0.2, Math.min(newScale, 3.0));
+            zoomScale = Math.max(0.1, Math.min(newScale, 3.0));
             document.getElementById('zoomLevel').innerText = Math.round(zoomScale * 100) + '%';
-            mainCanvas.style.transform = `scale(${zoomScale})`;
+            
+            // Real size adjustments instead of tricky CSS transform
+            innerContainer.style.width = Math.round(mainCanvas.width * zoomScale) + 'px';
+            innerContainer.style.height = Math.round(mainCanvas.height * zoomScale) + 'px';
         }
 
         function fitCanvasToScreen() {
             const wrapper = document.getElementById('canvasWrapper');
-            let targetScale = (wrapper.clientWidth - 30) / mainCanvas.width; 
+            // 50px accounts for wrapper padding to keep a safe edge
+            let targetScale = (wrapper.clientWidth - 50) / mainCanvas.width; 
             if (targetScale > 1) targetScale = 1; 
             setZoom(targetScale);
         }
@@ -360,7 +369,7 @@
 
             document.getElementById('welcomeScreen').style.display = 'none';
             document.getElementById('mainUploadZone').style.display = 'none';
-            targetColors = []; customTexts = []; 
+            targetColors = []; customTexts = []; watermarkImg = null; 
             
             isHDActive = false;
             document.getElementById('makeHDBtn').innerText = "⚡ Turn ON HD Quality";
@@ -520,10 +529,17 @@
             mainCanvas.width = w; mainCanvas.height = h;
             maskBuffer = new Uint8Array(w * h); 
             document.getElementById('settingsPanel').style.display = "grid"; 
-            document.getElementById('workspace').style.display = "block"; mainCanvas.style.display = "block";
+            document.getElementById('workspace').style.display = "block"; 
+            innerContainer.style.display = "inline-block"; // Perfect Wrapper Display
             document.getElementById('resetBtn').style.display = "block";
-            if(currentMode === 'pdf') document.getElementById('processPdfBtn').style.display = "block"; 
-            else document.getElementById('downloadImgBtn').style.display = "block";
+            
+            if(currentMode === 'pdf') {
+                document.getElementById('processPdfBtn').style.display = "block"; 
+                document.getElementById('downloadImgBtn').style.display = "none";
+            } else {
+                document.getElementById('downloadImgBtn').style.display = "block";
+                document.getElementById('processPdfBtn').style.display = "none";
+            }
         }
 
         function saveOriginalState() {
@@ -670,7 +686,35 @@
             });
         }
 
-        document.getElementById('resetBtn').addEventListener('click', () => { location.reload(); });
+        document.getElementById('resetBtn').addEventListener('click', () => {
+            currentMode = ''; baseOriginalImageData1x = null; baseOriginalImageData = null;   
+            originalImageData = null; cachedBgData = null; pdfDocument = null;
+            targetColors = []; maskBuffer = null; currentTool = 'clicker';
+            isDrawing = false; zoomScale = 1.0; isHDActive = false; 
+            watermarkImg = null; customTexts = []; activeDragTarget = null; 
+
+            document.getElementById('uploadFile').value = '';
+            document.getElementById('wmUpload').value = '';
+            document.getElementById('textInput').value = '';
+            document.getElementById('instructionText').innerHTML = "👆 Click to replace bg. <b>Drag Text & Logo</b> to move them.";
+
+            const hdBtn = document.getElementById('makeHDBtn');
+            hdBtn.innerText = "⚡ Turn ON HD Quality";
+            hdBtn.style.background = "linear-gradient(135deg, #3b82f6, #8b5cf6)";
+            hdBtn.style.pointerEvents = "auto";
+
+            document.getElementById('workspace').style.display = "none";
+            innerContainer.style.display = "none";
+            document.getElementById('settingsPanel').style.display = "none";
+            document.getElementById('resetBtn').style.display = "none";
+            document.getElementById('processPdfBtn').style.display = "none";
+            document.getElementById('downloadImgBtn').style.display = "none";
+
+            document.getElementById('welcomeScreen').style.display = "grid";
+            document.getElementById('mainUploadZone').style.display = "block";
+
+            ctx.clearRect(0, 0, mainCanvas.width, mainCanvas.height);
+        });
 
         document.getElementById('processPdfBtn').addEventListener('click', async () => {
             if (!pdfDocument || (targetColors.length === 0 && !maskBuffer.includes(1))) return;
