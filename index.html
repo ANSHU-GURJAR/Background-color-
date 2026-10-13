@@ -4,10 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cosmic Luxury HD Engine (Pro Edition)</title>
-    
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-    
+
     <style>
         :root {
             --gold: #d4af37;
@@ -18,26 +18,25 @@
             --cosmic-purple: #8b5cf6;
         }
 
-        body { 
-            font-family: 'Segoe UI', Tahoma, Geneva, sans-serif; 
-            color: var(--text-light); 
-            min-height: 100vh; margin: 0; padding: 5vh 20px 40px 20px; 
-            display: flex; justify-content: center; align-items: flex-start; overflow-x: hidden; 
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, sans-serif;
+            color: var(--text-light);
+            min-height: 100vh; margin: 0; padding: 5vh 20px 40px 20px;
+            display: flex; justify-content: center; align-items: flex-start; overflow-x: hidden;
             background: linear-gradient(-45deg, #050b14, #1a1025, #0a192f, #000000);
             background-size: 400% 400%; animation: cosmicBG 15s ease infinite;
         }
-
         @keyframes cosmicBG { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
 
         #loginScreen {
-            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; 
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
             background: rgba(5, 11, 20, 0.85); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
             z-index: 100000; display: flex; justify-content: center; align-items: center; transition: opacity 0.6s ease;
         }
         .login-box { max-width: 400px; padding: 40px; text-align: center; }
-        .login-input { 
-            width: 100%; background: rgba(0,0,0,0.5); border: 2px solid rgba(255,255,255,0.1); 
-            color: #fff; padding: 15px; border-radius: 12px; font-size: 16px; margin-bottom: 20px; 
+        .login-input {
+            width: 100%; background: rgba(0,0,0,0.5); border: 2px solid rgba(255,255,255,0.1);
+            color: #fff; padding: 15px; border-radius: 12px; font-size: 16px; margin-bottom: 20px;
             text-align: center; letter-spacing: 2px; transition: 0.3s; box-sizing: border-box;
         }
         .login-input:focus { outline: none; border-color: var(--gold); box-shadow: 0 0 15px var(--gold-glow); }
@@ -49,7 +48,7 @@
         }
         .loader-ring {
             width: 80px; height: 80px; border: 4px solid rgba(255,255,255,0.05);
-            border-top: 4px solid var(--gold); border-right: 4px solid var(--cosmic-purple); border-radius: 50%; 
+            border-top: 4px solid var(--gold); border-right: 4px solid var(--cosmic-purple); border-radius: 50%;
             animation: spinRing 1s cubic-bezier(0.68, -0.55, 0.265, 1.55) infinite; margin-bottom: 25px; box-shadow: 0 0 30px rgba(212, 175, 55, 0.3);
         }
         @keyframes spinRing { 100% { transform: rotate(360deg); } }
@@ -62,14 +61,14 @@
         .orb-3 { width: 450px; height: 450px; background: rgba(168, 85, 247, 0.25); top: 30%; left: 35%; animation-duration: 35s; }
         @keyframes floatOrb { 0% { transform: translate(0, 0) scale(1); } 100% { transform: translate(-80px, -60px) scale(1.1); } }
 
-        .container { 
+        .container {
             background: var(--glass-bg); backdrop-filter: blur(35px); -webkit-backdrop-filter: blur(35px);
-            border: 1px solid var(--glass-border); padding: 40px; border-radius: 24px; max-width: 1200px; width: 100%; 
-            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255,255,255,0.2); z-index: 10; 
+            border: 1px solid var(--glass-border); padding: 40px; border-radius: 24px; max-width: 1200px; width: 100%;
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255,255,255,0.2); z-index: 10;
             opacity: 0; transform: translateY(30px); transition: all 1s cubic-bezier(0.22, 1, 0.36, 1);
         }
         .container.loaded { opacity: 1; transform: translateY(0); }
-        
+
         h2 { text-align: center; color: var(--text-light); font-weight: 400; letter-spacing: 3px; margin-bottom: 35px; text-transform: uppercase; text-shadow: 0 0 20px rgba(255,255,255,0.2); }
         h2 span { color: var(--gold); text-shadow: 0 0 15px var(--gold-glow); }
 
@@ -102,12 +101,13 @@
         .controls h3 { margin:0 0 15px 0; color:#cbd5e1; font-weight:500; font-size: 16px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px; }
         label { font-size: 13px; color: #94a3b8; display: block; margin-top: 15px; margin-bottom: 5px; }
         input[type="color"], input[type="range"] { width: 100%; cursor: pointer; accent-color: var(--gold); }
-        
+
         .wm-upload-btn { background: #1e293b; color: #fff; border: 1px solid rgba(255,255,255,0.2); padding: 10px 15px; border-radius: 8px; width: 100%; cursor: pointer; text-align: center; display: block; font-size: 13px; font-weight: bold; box-sizing: border-box; transition: 0.3s; }
         .wm-upload-btn:hover { background: var(--gold); color: #000; box-shadow: 0 0 10px var(--gold-glow); }
-        
+
         .text-input-field { width: 100%; background: rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.2); color: #fff; padding: 10px; border-radius: 8px; font-size: 14px; box-sizing: border-box; margin-bottom: 10px; }
         .text-input-field:focus { outline: none; border-color: var(--gold); }
+        select.text-input-field option { background: #0f172a; color: #fff; }
 
         .toolbar { display: flex; gap: 12px; background: rgba(0,0,0,0.5); padding: 15px; border-radius: 12px; align-items: center; justify-content: center; margin-bottom: 20px; flex-wrap: wrap; border: 1px solid rgba(255,255,255,0.05); }
         .tool-btn { background: #1e293b; color: #cbd5e1; border: 1px solid rgba(255,255,255,0.1); padding: 10px 20px; border-radius: 30px; cursor: pointer; font-size: 14px; font-weight: 500; transition: all 0.3s; }
@@ -115,28 +115,24 @@
         .tool-btn:hover:not(.active) { background: #334155; color: #fff; }
         .brush-size { display: flex; align-items: center; gap: 10px; font-size: 14px; color: #cbd5e1; background: #0f172a; padding: 5px 15px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.05); }
 
-        .canvas-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
+        .canvas-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; flex-wrap: wrap; gap: 10px; }
         .zoom-controls { display: flex; gap: 12px; align-items: center; background: rgba(0,0,0,0.6); padding: 8px 20px; border-radius: 30px; color: var(--gold); border: 1px solid rgba(255,255,255,0.1); }
         .zoom-btn { background: transparent; border: none; color: var(--gold); font-size: 20px; cursor: pointer; font-weight: bold; transition: transform 0.2s; }
         .zoom-btn:hover { transform: scale(1.3); }
-        
-        /* UPDATED WRAPPER AND CENTERING ENGINE */
-        .canvas-wrapper { 
-            width: 100%; height: 550px; overflow: auto; 
-            border: 2px dashed rgba(212, 175, 55, 0.4); border-radius: 12px; 
-            background: rgba(0,0,0,0.8); text-align: center; /* Horizontally centers inline elements */
-            padding: 20px; box-sizing: border-box; position: relative;
-            box-shadow: inset 0 0 30px rgba(0,0,0,0.8); 
-        }
-        
-        #innerCanvasContainer {
-            position: relative; display: none; margin: 0 auto; 
-            box-shadow: 0 0 20px rgba(0,0,0,0.5); overflow: hidden;
-            border-radius: 4px;
-        }
 
-        canvas { display: block; width: 100%; height: 100%; cursor: crosshair; }
-        
+        .canvas-wrapper {
+            width: 100%; height: 550px; overflow: auto;
+            border: 2px dashed rgba(212, 175, 55, 0.4); border-radius: 12px;
+            background: rgba(0,0,0,0.8); text-align: center;
+            padding: 20px; box-sizing: border-box; position: relative;
+            box-shadow: inset 0 0 30px rgba(0,0,0,0.8);
+        }
+        #innerCanvasContainer {
+            position: relative; display: none; margin: 0 auto;
+            box-shadow: 0 0 20px rgba(0,0,0,0.5); overflow: hidden; border-radius: 4px;
+        }
+        canvas { display: block; width: 100%; height: 100%; cursor: crosshair; touch-action: none; }
+
         #scannerLine {
             position: absolute; top: -100%; left: 0; width: 100%; height: 100%;
             background: linear-gradient(to bottom, transparent 0%, rgba(139, 92, 246, 0.2) 70%, rgba(212, 175, 55, 0.4) 100%);
@@ -145,7 +141,7 @@
         }
         .scanning { animation: scanAnim 0.8s cubic-bezier(0.25, 1, 0.5, 1); }
         @keyframes scanAnim { 0% { top: -100%; opacity: 0; } 10% { opacity: 1; } 80% { top: 0%; opacity: 1; } 100% { top: 10%; opacity: 0; } }
-        
+
         .pulse-text { color: var(--gold); font-size: 15px; letter-spacing: 0.5px; }
 
         .btn-group { display: flex; gap: 20px; margin-top: 30px; }
@@ -195,7 +191,7 @@
         </div>
 
         <div class="welcome-features" id="welcomeScreen">
-            <div class="feature-card"><div class="icon">👆</div><h4>Multi-Click Engine</h4><p>Seamlessly blend backgrounds.</p></div>
+            <div class="feature-card"><div class="icon">👆</div><h4>Smart Fill Engine</h4><p>Gradient backgrounds bhi ek click mein.</p></div>
             <div class="feature-card"><div class="icon">📝</div><h4>Text & Annotation</h4><p>Add custom text, titles, and logos.</p></div>
             <div class="feature-card"><div class="icon">🌟</div><h4>HD Upscaling</h4><p>Enhance images without color loss.</p></div>
         </div>
@@ -205,9 +201,23 @@
                 <h3>🎨 1. Background</h3>
                 <label>Select New Color:</label>
                 <input type="color" id="newColorPicker" value="#b30000">
-                <label>Match Tolerance:</label>
+
+                <label>🎯 Fill Mode:</label>
+                <select id="fillMode" class="text-input-field">
+                    <option value="smart">Smart Fill (Gradient background)</option>
+                    <option value="global">Global Color Match (purana)</option>
+                </select>
+
+                <label>🌈 Gradient Step (Smart Fill):</label>
+                <input type="range" id="stepSlider" min="2" max="40" value="12">
+
+                <label style="display:flex; gap:8px; align-items:center;">
+                    <input type="checkbox" id="keepShading" checked> Shading preserve karo
+                </label>
+
+                <label>Match Tolerance (Global mode):</label>
                 <input type="range" id="toleranceSlider" min="0" max="150" value="30">
-                <label>🪶 Edge Feathering:</label>
+                <label>🪶 Edge Feathering (Global mode):</label>
                 <input type="range" id="featherSlider" min="0" max="50" value="0">
             </div>
 
@@ -217,7 +227,7 @@
                 <input type="range" id="brightSlider" min="-100" max="100" value="0">
                 <label>🌗 Contrast:</label>
                 <input type="range" id="contrastSlider" min="-100" max="100" value="0">
-                
+
                 <label style="margin-top: 15px;">©️ Watermark Logo:</label>
                 <div style="position: relative;">
                     <span class="wm-upload-btn">Upload Logo</span>
@@ -259,7 +269,6 @@
                 </div>
             </div>
 
-            <!-- NEW PERFECT CENTER WRAPPER -->
             <div class="canvas-wrapper" id="canvasWrapper">
                 <div id="innerCanvasContainer">
                     <div id="scannerLine"></div>
@@ -282,11 +291,14 @@
     <script>
         pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.worker.min.js';
 
-        const APP_PASSWORD = "admin"; 
+        // ================= LOGIN =================
+        // Note: yeh password source code mein dikhta hai, asli security nahi hai.
+        const APP_PASSWORD = "admin";
         document.getElementById('loginBtn').addEventListener('click', checkLogin);
-        document.getElementById('passInput').addEventListener('keypress', function(e) { if(e.key === 'Enter') checkLogin(); });
+        document.getElementById('passInput').addEventListener('keypress', e => { if (e.key === 'Enter') checkLogin(); });
+
         function checkLogin() {
-            if(document.getElementById('passInput').value === APP_PASSWORD) {
+            if (document.getElementById('passInput').value === APP_PASSWORD) {
                 const loginScreen = document.getElementById('loginScreen');
                 const splash = document.getElementById('splashScreen');
                 const mainContainer = document.getElementById('mainContainer');
@@ -304,98 +316,309 @@
             }
         }
 
-        let currentMode = ''; 
-        let baseOriginalImageData1x = null; 
-        let baseOriginalImageData = null;   
-        let originalImageData = null; 
-        let cachedBgData = null; 
+        // ================= STATE =================
+        let currentMode = '';
+        let baseOriginalImageData1x = null;
+        let baseOriginalImageData = null;
+        let originalImageData = null;
+        let cachedBgData = null;
         let pdfDocument = null;
-        let targetColors = []; 
-        let maskBuffer = null; 
+        let targetColors = [];
+        let maskBuffer = null;      // 1 = brush, 2 = eraser
         let currentTool = 'clicker';
         let isDrawing = false;
         let zoomScale = 1.0;
-        let isHDActive = false; 
+        let isHDActive = false;
+
+        let smartSeeds = [];        // Smart Fill click points
+        let smartMask = null;       // 1 = background, 2 = text edge fringe
+        let regionStats = null;     // Background ka average H, S, L
+
+        let bgPending = false;
+        let lastBrushPos = null;
 
         let watermarkImg = null;
         let wmX = 20, wmY = 20, wmW = 150, wmH = 150;
-        let customTexts = []; 
-        let activeDragTarget = null; 
+        let customTexts = [];
+        let activeDragTarget = null;
         let dragOffX = 0, dragOffY = 0;
 
         const mainCanvas = document.getElementById('mainCanvas');
-        const ctx = mainCanvas.getContext('2d', {willReadFrequently: true});
+        const ctx = mainCanvas.getContext('2d', { willReadFrequently: true });
         const scannerLine = document.getElementById('scannerLine');
         const instructionText = document.getElementById('instructionText');
         const innerContainer = document.getElementById('innerCanvasContainer');
+        const hdBtn = document.getElementById('makeHDBtn');
 
+        // ================= COLOR HELPERS =================
         function hexToRgb(hex) {
             const bigint = parseInt(hex.slice(1), 16);
             return [(bigint >> 16) & 255, (bigint >> 8) & 255, bigint & 255];
         }
 
+        function rgbToHsl(r, g, b) {
+            r /= 255; g /= 255; b /= 255;
+            const max = Math.max(r, g, b), min = Math.min(r, g, b), d = max - min;
+            const l = (max + min) / 2;
+            let h = 0, s = 0;
+            if (d) {
+                s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+                if (max === r) h = (g - b) / d + (g < b ? 6 : 0);
+                else if (max === g) h = (b - r) / d + 2;
+                else h = (r - g) / d + 4;
+                h /= 6;
+            }
+            return [h, s, l];
+        }
+
+        function hslToRgb(h, s, l) {
+            if (!s) { const v = Math.round(l * 255); return [v, v, v]; }
+            const q = l < 0.5 ? l * (1 + s) : l + s - l * s, p = 2 * l - q;
+            const f = t => {
+                if (t < 0) t += 1; if (t > 1) t -= 1;
+                if (t < 1/6) return p + (q - p) * 6 * t;
+                if (t < 1/2) return q;
+                if (t < 2/3) return p + (q - p) * (2/3 - t) * 6;
+                return p;
+            };
+            return [Math.round(f(h + 1/3) * 255), Math.round(f(h) * 255), Math.round(f(h - 1/3) * 255)];
+        }
+
+        const clamp01 = v => Math.max(0, Math.min(1, v));
+        const hueDist = (a, b) => { const d = Math.abs(a - b); return Math.min(d, 1 - d); };
+
+        function getSettings() {
+            const contrast = parseInt(document.getElementById('contrastSlider').value);
+            const brightness = parseInt(document.getElementById('brightSlider').value);
+            const tolerance = parseInt(document.getElementById('toleranceSlider').value);
+            const feather = parseInt(document.getElementById('featherSlider').value);
+            const factor = (259 * (contrast + 255)) / (255 * (259 - contrast));
+            const lut = new Uint8Array(256);
+            for (let i = 0; i < 256; i++) lut[i] = Math.max(0, Math.min(255, factor * (i - 128) + 128 + brightness));
+            const newRgb = hexToRgb(document.getElementById('newColorPicker').value);
+            return {
+                newRgb, newHsl: rgbToHsl(...newRgb),
+                tolerance, feather, lut,
+                tol2: tolerance * tolerance,
+                outer2: (tolerance + feather) * (tolerance + feather),
+                keepShading: document.getElementById('keepShading').checked
+            };
+        }
+
+        // ================= RECOLOR ENGINE =================
+        function smartRecolor(data, j, smartVal, s) {
+            if (smartVal === 1 && !s.keepShading) {
+                data[j] = s.newRgb[0]; data[j + 1] = s.newRgb[1]; data[j + 2] = s.newRgb[2];
+                return;
+            }
+            const [, ps, pl] = rgbToHsl(data[j], data[j + 1], data[j + 2]);
+            const [nh, ns, nl] = s.newHsl;
+            const out = hslToRgb(nh, clamp01(ps + (ns - regionStats.s)), clamp01(pl + (nl - regionStats.l)));
+            data[j] = out[0]; data[j + 1] = out[1]; data[j + 2] = out[2];
+        }
+
+        function recolorPixel(data, j, maskVal, s, smartVal) {
+            const r = data[j], g = data[j + 1], b = data[j + 2];
+            const adjR = s.lut[r], adjG = s.lut[g], adjB = s.lut[b];
+
+            if (maskVal === 1) { data[j] = s.newRgb[0]; data[j + 1] = s.newRgb[1]; data[j + 2] = s.newRgb[2]; return; }
+            if (maskVal === 2) { data[j] = adjR; data[j + 1] = adjG; data[j + 2] = adjB; return; }
+            if (smartVal && regionStats) { smartRecolor(data, j, smartVal, s); return; }
+
+            let minD2 = Infinity;
+            for (const tc of targetColors) {
+                const d2 = (r - tc[0]) ** 2 + (g - tc[1]) ** 2 + (b - tc[2]) ** 2;
+                if (d2 < minD2) minD2 = d2;
+            }
+            if (minD2 <= s.tol2) {
+                data[j] = s.newRgb[0]; data[j + 1] = s.newRgb[1]; data[j + 2] = s.newRgb[2];
+            } else if (s.feather > 0 && minD2 <= s.outer2) {
+                const mix = (Math.sqrt(minD2) - s.tolerance) / s.feather;
+                data[j]     = Math.round(adjR * mix + s.newRgb[0] * (1 - mix));
+                data[j + 1] = Math.round(adjG * mix + s.newRgb[1] * (1 - mix));
+                data[j + 2] = Math.round(adjB * mix + s.newRgb[2] * (1 - mix));
+            } else {
+                data[j] = adjR; data[j + 1] = adjG; data[j + 2] = adjB;
+            }
+        }
+
+        // ================= SMART FILL (GRADIENT FLOOD FILL) =================
+        function buildSmartMask() {
+            if (!originalImageData || smartSeeds.length === 0) { smartMask = null; regionStats = null; return; }
+            const w = originalImageData.width, h = originalImageData.height, d = originalImageData.data;
+            const step = parseInt(document.getElementById('stepSlider').value);
+            const step2 = step * step;
+            smartMask = new Uint8Array(w * h);
+            const stack = new Int32Array(w * h);
+
+            // 1) Flood fill: padosi pixel se compare, isliye gradient ke saath failta hai
+            for (const sd of smartSeeds) {
+                const start = sd.y * w + sd.x;
+                if (start < 0 || start >= w * h || smartMask[start]) continue;
+                let top = 0;
+                stack[top++] = start; smartMask[start] = 1;
+                while (top) {
+                    const p = stack[--top];
+                    const px = p % w, py = (p / w) | 0, pi = p * 4;
+                    const r = d[pi], g = d[pi + 1], b = d[pi + 2];
+                    const tryPush = q => {
+                        if (smartMask[q]) return;
+                        const qi = q * 4;
+                        const dr = d[qi] - r, dg = d[qi + 1] - g, db = d[qi + 2] - b;
+                        if (dr * dr + dg * dg + db * db <= step2) { smartMask[q] = 1; stack[top++] = q; }
+                    };
+                    if (px > 0) tryPush(p - 1);
+                    if (px < w - 1) tryPush(p + 1);
+                    if (py > 0) tryPush(p - w);
+                    if (py < h - 1) tryPush(p + w);
+                }
+            }
+
+            // 2) Background ka average color (hue ka circular mean)
+            let cx = 0, cy = 0, sumS = 0, sumL = 0, n = 0;
+            for (let p = 0; p < w * h; p++) {
+                if (smartMask[p] !== 1) continue;
+                const [hh, ss, ll] = rgbToHsl(d[p * 4], d[p * 4 + 1], d[p * 4 + 2]);
+                cx += Math.cos(hh * 2 * Math.PI); cy += Math.sin(hh * 2 * Math.PI);
+                sumS += ss; sumL += ll; n++;
+            }
+            if (!n) { smartMask = null; regionStats = null; return; }
+            let avgH = Math.atan2(cy, cx) / (2 * Math.PI); if (avgH < 0) avgH += 1;
+            regionStats = { h: avgH, s: sumS / n, l: sumL / n };
+
+            // 3) Text ke kinaron ka bluish fringe (2px). White/yellow text safe rehta hai.
+            for (let pass = 0; pass < 2; pass++) {
+                const add = [];
+                for (let y = 0; y < h; y++) {
+                    for (let x = 0; x < w; x++) {
+                        const p = y * w + x;
+                        if (smartMask[p]) continue;
+                        const near = (x > 0 && smartMask[p - 1]) || (x < w - 1 && smartMask[p + 1]) ||
+                                     (y > 0 && smartMask[p - w]) || (y < h - 1 && smartMask[p + w]);
+                        if (!near) continue;
+                        const [hh, ss] = rgbToHsl(d[p * 4], d[p * 4 + 1], d[p * 4 + 2]);
+                        if (ss > 0.12 && hueDist(hh, regionStats.h) < 0.08) add.push(p);
+                    }
+                }
+                add.forEach(p => smartMask[p] = 2);
+            }
+        }
+
+        function processBackgroundMath() {
+            if (!originalImageData) return;
+            const img = new ImageData(new Uint8ClampedArray(originalImageData.data), originalImageData.width, originalImageData.height);
+            const s = getSettings();
+            const data = img.data;
+            for (let j = 0; j < data.length; j += 4) {
+                const p = j >> 2;
+                recolorPixel(data, j, maskBuffer[p], s, smartMask ? smartMask[p] : 0);
+            }
+            cachedBgData = img;
+            drawWorkspace();
+        }
+
+        function scheduleBgUpdate() {
+            if (bgPending) return;
+            bgPending = true;
+            requestAnimationFrame(() => { bgPending = false; processBackgroundMath(); });
+        }
+
+        function drawWorkspace() {
+            if (!cachedBgData) return;
+            ctx.putImageData(cachedBgData, 0, 0);
+            if (watermarkImg) ctx.drawImage(watermarkImg, wmX, wmY, wmW, wmH);
+
+            customTexts.forEach((t, index) => {
+                ctx.font = `bold ${t.size}px Arial`; ctx.fillStyle = t.color;
+                ctx.fillText(t.text, t.x, t.y);
+                if (activeDragTarget && activeDragTarget.type === 'text' && activeDragTarget.index === index) {
+                    ctx.strokeStyle = 'rgba(212, 175, 55, 0.8)'; ctx.lineWidth = 2;
+                    const tw = ctx.measureText(t.text).width;
+                    ctx.strokeRect(t.x - 5, t.y - t.size, tw + 10, t.size + 10);
+                }
+            });
+        }
+
+        // ================= TOOLS & ZOOM =================
         ['toolClicker', 'toolBrush', 'toolEraser'].forEach(id => {
             document.getElementById(id).addEventListener('click', (e) => {
-                document.querySelector('.tool-btn.active').classList.remove('active'); e.target.classList.add('active');
+                document.querySelector('.tool-btn.active').classList.remove('active');
+                e.currentTarget.classList.add('active');
                 currentTool = id.replace('tool', '').toLowerCase();
                 mainCanvas.style.cursor = currentTool === 'clicker' ? 'crosshair' : 'cell';
             });
         });
 
-        // TRUE DIMENSIONAL ZOOM (Fixes Scrollbar & Corner issues)
         document.getElementById('zoomIn').addEventListener('click', () => setZoom(zoomScale + 0.25));
         document.getElementById('zoomOut').addEventListener('click', () => setZoom(zoomScale - 0.25));
-        
+
         function setZoom(newScale) {
             zoomScale = Math.max(0.1, Math.min(newScale, 3.0));
             document.getElementById('zoomLevel').innerText = Math.round(zoomScale * 100) + '%';
-            
-            // Real size adjustments instead of tricky CSS transform
             innerContainer.style.width = Math.round(mainCanvas.width * zoomScale) + 'px';
             innerContainer.style.height = Math.round(mainCanvas.height * zoomScale) + 'px';
         }
 
         function fitCanvasToScreen() {
             const wrapper = document.getElementById('canvasWrapper');
-            // 50px accounts for wrapper padding to keep a safe edge
-            let targetScale = (wrapper.clientWidth - 50) / mainCanvas.width; 
-            if (targetScale > 1) targetScale = 1; 
+            let targetScale = (wrapper.clientWidth - 50) / mainCanvas.width;
+            if (targetScale > 1) targetScale = 1;
             setZoom(targetScale);
         }
 
+        function setHDButton(state) {
+            if (state === 'off') {
+                hdBtn.innerText = "⚡ Turn ON HD Quality";
+                hdBtn.style.background = "linear-gradient(135deg, #3b82f6, #8b5cf6)";
+                hdBtn.style.pointerEvents = "auto";
+            } else if (state === 'on') {
+                hdBtn.innerText = "🔴 Turn OFF HD Quality";
+                hdBtn.style.background = "#ef4444";
+            } else {
+                hdBtn.innerText = "✅ PDF is natively HD";
+                hdBtn.style.background = "transparent";
+                hdBtn.style.pointerEvents = "none";
+            }
+        }
+
+        function clearEditState() {
+            targetColors = []; customTexts = []; watermarkImg = null;
+            smartSeeds = []; smartMask = null; regionStats = null;
+            lastBrushPos = null; activeDragTarget = null; isDrawing = false;
+            isHDActive = false;
+            setHDButton('off');
+        }
+
+        // ================= UPLOAD =================
         document.getElementById('uploadFile').addEventListener('change', async (e) => {
             const file = e.target.files[0];
             if (!file) return;
 
             document.getElementById('welcomeScreen').style.display = 'none';
             document.getElementById('mainUploadZone').style.display = 'none';
-            targetColors = []; customTexts = []; watermarkImg = null; 
-            
-            isHDActive = false;
-            document.getElementById('makeHDBtn').innerText = "⚡ Turn ON HD Quality";
-            document.getElementById('makeHDBtn').style.background = "linear-gradient(135deg, #3b82f6, #8b5cf6)";
-            document.getElementById('makeHDBtn').style.pointerEvents = "auto";
+            clearEditState();
 
             if (file.type === "application/pdf") {
                 currentMode = 'pdf';
                 const fileReader = new FileReader();
                 fileReader.onload = async function() {
-                    const typedarray = new Uint8Array(this.result);
-                    pdfDocument = await pdfjsLib.getDocument(typedarray).promise;
-                    const page = await pdfDocument.getPage(1);
-                    const viewport = page.getViewport({ scale: 2.0 }); 
-                    initCanvas(viewport.width, viewport.height);
-                    await page.render({ canvasContext: ctx, viewport: viewport }).promise;
-                    saveOriginalState();
-                    
-                    isHDActive = true; 
-                    document.getElementById('makeHDBtn').innerText = "✅ PDF is natively HD";
-                    document.getElementById('makeHDBtn').style.background = "transparent";
-                    document.getElementById('makeHDBtn').style.pointerEvents = "none";
+                    try {
+                        const typedarray = new Uint8Array(this.result);
+                        pdfDocument = await pdfjsLib.getDocument(typedarray).promise;
+                        const page = await pdfDocument.getPage(1);
+                        const viewport = page.getViewport({ scale: 2.0 });
+                        initCanvas(viewport.width, viewport.height);
+                        await page.render({ canvasContext: ctx, viewport: viewport }).promise;
+                        saveOriginalState();
+                        isHDActive = true;
+                        setHDButton('pdf');
+                    } catch (err) {
+                        alert("Yeh PDF open nahi ho saki (shayad password-protected ya corrupt hai).");
+                        document.getElementById('resetBtn').click();
+                    }
                 };
                 fileReader.readAsArrayBuffer(file);
-            } 
-            else if (file.type.startsWith("image/")) {
+            } else if (file.type.startsWith("image/")) {
                 currentMode = 'image';
                 const reader = new FileReader();
                 reader.onload = function(event) {
@@ -405,47 +628,69 @@
                         ctx.drawImage(img, 0, 0);
                         saveOriginalState();
                     };
+                    img.onerror = () => { alert("Yeh image open nahi ho saki."); document.getElementById('resetBtn').click(); };
                     img.src = event.target.result;
                 };
                 reader.readAsDataURL(file);
             }
         });
 
-        document.getElementById('makeHDBtn').addEventListener('click', () => {
-            if(!baseOriginalImageData1x || currentMode === 'pdf') return;
-            const btn = document.getElementById('makeHDBtn');
+        function initCanvas(w, h) {
+            mainCanvas.width = w; mainCanvas.height = h;
+            maskBuffer = new Uint8Array(w * h);
+            document.getElementById('settingsPanel').style.display = "grid";
+            document.getElementById('workspace').style.display = "block";
+            innerContainer.style.display = "inline-block";
+            document.getElementById('resetBtn').style.display = "block";
 
-            if(isHDActive) {
+            if (currentMode === 'pdf') {
+                document.getElementById('processPdfBtn').style.display = "block";
+                document.getElementById('downloadImgBtn').style.display = "none";
+            } else {
+                document.getElementById('downloadImgBtn').style.display = "block";
+                document.getElementById('processPdfBtn').style.display = "none";
+            }
+        }
+
+        function saveOriginalState() {
+            baseOriginalImageData1x = ctx.getImageData(0, 0, mainCanvas.width, mainCanvas.height);
+            baseOriginalImageData = new ImageData(new Uint8ClampedArray(baseOriginalImageData1x.data), baseOriginalImageData1x.width, baseOriginalImageData1x.height);
+            originalImageData = new ImageData(new Uint8ClampedArray(baseOriginalImageData.data), baseOriginalImageData.width, baseOriginalImageData.height);
+            processBackgroundMath();
+            fitCanvasToScreen();
+        }
+
+        // ================= HD TOGGLE =================
+        hdBtn.addEventListener('click', () => {
+            if (!baseOriginalImageData1x || currentMode === 'pdf') return;
+
+            if (isHDActive) {
                 isHDActive = false;
-                btn.innerText = "⚡ Turn ON HD Quality";
-                btn.style.background = "linear-gradient(135deg, #3b82f6, #8b5cf6)";
+                setHDButton('off');
 
                 baseOriginalImageData = new ImageData(new Uint8ClampedArray(baseOriginalImageData1x.data), baseOriginalImageData1x.width, baseOriginalImageData1x.height);
                 originalImageData = baseOriginalImageData;
-                
-                const oldW = mainCanvas.width; const oldH = mainCanvas.height;
-                const newW = baseOriginalImageData.width; const newH = baseOriginalImageData.height;
 
+                const oldW = mainCanvas.width;
+                const newW = baseOriginalImageData.width, newH = baseOriginalImageData.height;
                 const newMask = new Uint8Array(newW * newH);
-                for(let y=0; y<newH; y++) {
-                    for(let x=0; x<newW; x++) {
-                        newMask[y * newW + x] = maskBuffer[(y*2)*oldW + (x*2)];
-                    }
-                }
+                for (let y = 0; y < newH; y++)
+                    for (let x = 0; x < newW; x++)
+                        newMask[y * newW + x] = maskBuffer[(y * 2) * oldW + (x * 2)];
                 maskBuffer = newMask;
                 mainCanvas.width = newW; mainCanvas.height = newH;
 
                 wmX /= 2; wmY /= 2; wmW /= 2; wmH /= 2;
                 customTexts.forEach(t => { t.x /= 2; t.y /= 2; t.size /= 2; });
+                smartSeeds.forEach(p => { p.x = Math.floor(p.x / 2); p.y = Math.floor(p.y / 2); });
 
                 instructionText.innerHTML = "❌ HD OFF. Showing normal quality.";
             } else {
                 isHDActive = true;
-                btn.innerText = "🔴 Turn OFF HD Quality";
-                btn.style.background = "#ef4444";
+                setHDButton('on');
 
-                const oldW = mainCanvas.width; const oldH = mainCanvas.height;
-                const newW = oldW * 2; const newH = oldH * 2;
+                const oldW = mainCanvas.width, oldH = mainCanvas.height;
+                const newW = oldW * 2, newH = oldH * 2;
 
                 const tempCanvas = document.createElement('canvas');
                 tempCanvas.width = oldW; tempCanvas.height = oldH;
@@ -462,14 +707,14 @@
                 originalImageData = baseOriginalImageData;
 
                 const newMask = new Uint8Array(newW * newH);
-                for(let y=0; y<oldH; y++) {
-                    for(let x=0; x<oldW; x++) {
+                for (let y = 0; y < oldH; y++) {
+                    for (let x = 0; x < oldW; x++) {
                         const val = maskBuffer[y * oldW + x];
-                        if(val > 0) {
-                            newMask[(y*2)*newW + (x*2)] = val;
-                            newMask[(y*2)*newW + (x*2+1)] = val;
-                            newMask[(y*2+1)*newW + (x*2)] = val;
-                            newMask[(y*2+1)*newW + (x*2+1)] = val;
+                        if (val > 0) {
+                            newMask[(y * 2) * newW + (x * 2)] = val;
+                            newMask[(y * 2) * newW + (x * 2 + 1)] = val;
+                            newMask[(y * 2 + 1) * newW + (x * 2)] = val;
+                            newMask[(y * 2 + 1) * newW + (x * 2 + 1)] = val;
                         }
                     }
                 }
@@ -478,36 +723,39 @@
 
                 wmX *= 2; wmY *= 2; wmW *= 2; wmH *= 2;
                 customTexts.forEach(t => { t.x *= 2; t.y *= 2; t.size *= 2; });
+                smartSeeds.forEach(p => { p.x *= 2; p.y *= 2; });
 
                 instructionText.innerHTML = "✅ HD ON! Image upscaled accurately.";
             }
 
+            buildSmartMask();
             processBackgroundMath();
-            fitCanvasToScreen(); 
+            fitCanvasToScreen();
         });
 
+        // ================= WATERMARK & TEXT =================
         document.getElementById('wmUpload').addEventListener('change', (e) => {
-            const file = e.target.files[0]; if(!file) return;
+            const file = e.target.files[0]; if (!file) return;
             const reader = new FileReader();
             reader.onload = (event) => {
                 watermarkImg = new Image();
                 watermarkImg.onload = () => {
                     const aspect = watermarkImg.width / watermarkImg.height;
-                    let baseSize = isHDActive ? 300 : 150; 
+                    const baseSize = isHDActive ? 300 : 150;
                     wmW = baseSize; wmH = baseSize / aspect; wmX = 20; wmY = 20;
                     drawWorkspace(); instructionText.innerHTML = "✨ Logo added! Drag it anywhere.";
-                }
+                };
                 watermarkImg.src = event.target.result;
-            }
+            };
             reader.readAsDataURL(file);
         });
 
         document.getElementById('addTextBtn').addEventListener('click', () => {
             const textVal = document.getElementById('textInput').value;
-            if(!textVal.trim()) { alert("Please enter some text first!"); return; }
+            if (!textVal.trim()) { alert("Please enter some text first!"); return; }
             customTexts.push({
                 text: textVal, x: mainCanvas.width / 2, y: mainCanvas.height / 2,
-                color: document.getElementById('textColor').value, 
+                color: document.getElementById('textColor').value,
                 size: parseInt(document.getElementById('textSize').value) * (isHDActive ? 2 : 1)
             });
             document.getElementById('textInput').value = '';
@@ -515,193 +763,148 @@
         });
 
         document.getElementById('textSize').addEventListener('input', (e) => {
-            if(customTexts.length > 0) { 
-                let size = parseInt(e.target.value);
-                customTexts[customTexts.length - 1].size = isHDActive ? size * 2 : size; 
-                drawWorkspace(); 
+            if (customTexts.length > 0) {
+                const size = parseInt(e.target.value);
+                customTexts[customTexts.length - 1].size = isHDActive ? size * 2 : size;
+                drawWorkspace();
             }
         });
         document.getElementById('textColor').addEventListener('input', (e) => {
-            if(customTexts.length > 0) { customTexts[customTexts.length - 1].color = e.target.value; drawWorkspace(); }
+            if (customTexts.length > 0) { customTexts[customTexts.length - 1].color = e.target.value; drawWorkspace(); }
         });
 
-        function initCanvas(w, h) {
-            mainCanvas.width = w; mainCanvas.height = h;
-            maskBuffer = new Uint8Array(w * h); 
-            document.getElementById('settingsPanel').style.display = "grid"; 
-            document.getElementById('workspace').style.display = "block"; 
-            innerContainer.style.display = "inline-block"; // Perfect Wrapper Display
-            document.getElementById('resetBtn').style.display = "block";
-            
-            if(currentMode === 'pdf') {
-                document.getElementById('processPdfBtn').style.display = "block"; 
-                document.getElementById('downloadImgBtn').style.display = "none";
-            } else {
-                document.getElementById('downloadImgBtn').style.display = "block";
-                document.getElementById('processPdfBtn').style.display = "none";
-            }
-        }
-
-        function saveOriginalState() {
-            baseOriginalImageData1x = ctx.getImageData(0, 0, mainCanvas.width, mainCanvas.height);
-            baseOriginalImageData = new ImageData(new Uint8ClampedArray(baseOriginalImageData1x.data), baseOriginalImageData1x.width, baseOriginalImageData1x.height);
-            originalImageData = new ImageData(new Uint8ClampedArray(baseOriginalImageData.data), baseOriginalImageData.width, baseOriginalImageData.height);
-            processBackgroundMath();
-            fitCanvasToScreen(); 
-        }
-
+        // ================= CANVAS INTERACTION (Mouse + Touch) =================
         function getMousePos(e) {
             const rect = mainCanvas.getBoundingClientRect();
-            return { 
-                x: Math.floor((e.clientX - rect.left) * (mainCanvas.width / rect.width)), 
-                y: Math.floor((e.clientY - rect.top) * (mainCanvas.height / rect.height)) 
+            const x = Math.floor((e.clientX - rect.left) * (mainCanvas.width / rect.width));
+            const y = Math.floor((e.clientY - rect.top) * (mainCanvas.height / rect.height));
+            return {
+                x: Math.max(0, Math.min(mainCanvas.width - 1, x)),
+                y: Math.max(0, Math.min(mainCanvas.height - 1, y))
             };
         }
 
-        mainCanvas.addEventListener('mousedown', (e) => {
+        mainCanvas.addEventListener('pointerdown', (e) => {
             if (!originalImageData) return;
+            try { mainCanvas.setPointerCapture(e.pointerId); } catch (_) {}
             const pos = getMousePos(e);
             activeDragTarget = null;
 
             for (let i = customTexts.length - 1; i >= 0; i--) {
-                let t = customTexts[i]; ctx.font = `bold ${t.size}px Arial`;
-                let tw = ctx.measureText(t.text).width; let th = t.size; let pad = 20; 
-                if(pos.x >= t.x - pad && pos.x <= t.x + tw + pad && pos.y >= t.y - th - pad && pos.y <= t.y + pad) {
+                const t = customTexts[i]; ctx.font = `bold ${t.size}px Arial`;
+                const tw = ctx.measureText(t.text).width, th = t.size, pad = 20;
+                if (pos.x >= t.x - pad && pos.x <= t.x + tw + pad && pos.y >= t.y - th - pad && pos.y <= t.y + pad) {
                     activeDragTarget = { type: 'text', index: i };
                     dragOffX = pos.x - t.x; dragOffY = pos.y - t.y;
-                    mainCanvas.style.cursor = 'grabbing'; return; 
+                    mainCanvas.style.cursor = 'grabbing'; return;
                 }
             }
 
-            if(watermarkImg && pos.x >= wmX && pos.x <= wmX + wmW && pos.y >= wmY && pos.y <= wmY + wmH) {
+            if (watermarkImg && pos.x >= wmX && pos.x <= wmX + wmW && pos.y >= wmY && pos.y <= wmY + wmH) {
                 activeDragTarget = { type: 'watermark' };
                 dragOffX = pos.x - wmX; dragOffY = pos.y - wmY;
                 mainCanvas.style.cursor = 'grabbing'; return;
             }
 
-            if(currentTool === 'clicker') {
-                const clickPos = (pos.y * mainCanvas.width + pos.x) * 4;
-                targetColors.push([originalImageData.data[clickPos], originalImageData.data[clickPos + 1], originalImageData.data[clickPos + 2]]); 
+            if (currentTool === 'clicker') {
+                const isSmart = document.getElementById('fillMode').value === 'smart';
+                if (isSmart) {
+                    smartSeeds.push({ x: pos.x, y: pos.y });
+                } else {
+                    const clickPos = (pos.y * mainCanvas.width + pos.x) * 4;
+                    targetColors.push([originalImageData.data[clickPos], originalImageData.data[clickPos + 1], originalImageData.data[clickPos + 2]]);
+                }
                 scannerLine.classList.remove('scanning'); void scannerLine.offsetWidth; scannerLine.classList.add('scanning');
                 instructionText.innerHTML = `✨ Scanning Area...`;
-                setTimeout(() => { processBackgroundMath(); instructionText.innerHTML = `✅ ${targetColors.length} Colors replaced.`; }, 300);
+                setTimeout(() => {
+                    if (isSmart) buildSmartMask();
+                    processBackgroundMath();
+                    instructionText.innerHTML = isSmart
+                        ? `✅ Smart Fill: ${smartSeeds.length} area(s) replaced.`
+                        : `✅ ${targetColors.length} Colors replaced.`;
+                }, 300);
             } else {
-                isDrawing = true; applyBrushOrEraser(pos.x, pos.y);
-            }
-        });
-
-        mainCanvas.addEventListener('mousemove', (e) => {
-            const pos = getMousePos(e);
-            if(activeDragTarget) {
-                if(activeDragTarget.type === 'watermark') { wmX = pos.x - dragOffX; wmY = pos.y - dragOffY; } 
-                else if (activeDragTarget.type === 'text') { customTexts[activeDragTarget.index].x = pos.x - dragOffX; customTexts[activeDragTarget.index].y = pos.y - dragOffY; }
-                drawWorkspace();
-            } else if(isDrawing && (currentTool === 'brush' || currentTool === 'eraser')) {
+                isDrawing = true;
+                lastBrushPos = null;
                 applyBrushOrEraser(pos.x, pos.y);
             }
         });
 
-        mainCanvas.addEventListener('mouseup', () => { isDrawing = false; activeDragTarget = null; mainCanvas.style.cursor = (currentTool === 'clicker') ? 'crosshair' : 'cell'; drawWorkspace(); });
-        mainCanvas.addEventListener('mouseleave', () => { isDrawing = false; activeDragTarget = null; drawWorkspace();});
-
-        function applyBrushOrEraser(x, y) {
-            const radius = parseInt(document.getElementById('brushSize').value);
-            const w = mainCanvas.width;
-            const val = currentTool === 'brush' ? 1 : 2;
-            for(let i = -radius; i <= radius; i++) {
-                for(let j = -radius; j <= radius; j++) {
-                    if(i*i + j*j <= radius*radius) {
-                        const px = x + i; const py = y + j;
-                        if(px >= 0 && px < w && py >= 0 && py < mainCanvas.height) maskBuffer[py * w + px] = val;
-                    }
+        mainCanvas.addEventListener('pointermove', (e) => {
+            if (!originalImageData) return;
+            const pos = getMousePos(e);
+            if (activeDragTarget) {
+                if (activeDragTarget.type === 'watermark') { wmX = pos.x - dragOffX; wmY = pos.y - dragOffY; }
+                else if (activeDragTarget.type === 'text') {
+                    customTexts[activeDragTarget.index].x = pos.x - dragOffX;
+                    customTexts[activeDragTarget.index].y = pos.y - dragOffY;
                 }
+                drawWorkspace();
+            } else if (isDrawing && (currentTool === 'brush' || currentTool === 'eraser')) {
+                applyBrushOrEraser(pos.x, pos.y);
             }
-            processBackgroundMath();
-        }
-
-        ['toleranceSlider', 'newColorPicker', 'featherSlider', 'brightSlider', 'contrastSlider'].forEach(id => {
-            document.getElementById(id).addEventListener('input', processBackgroundMath);
         });
 
-        function processBackgroundMath() {
-            if(!originalImageData) return;
-            const currentImageData = new ImageData(new Uint8ClampedArray(originalImageData.data), originalImageData.width, originalImageData.height);
-            const data = currentImageData.data;
-            const newRgb = hexToRgb(document.getElementById('newColorPicker').value);
-            const tolerance = parseInt(document.getElementById('toleranceSlider').value);
-            const feather = parseInt(document.getElementById('featherSlider').value);
-            const brightness = parseInt(document.getElementById('brightSlider').value);
-            const contrast = parseInt(document.getElementById('contrastSlider').value);
-            
-            const factor = (259 * (contrast + 255)) / (255 * (259 - contrast));
-            const lut = new Uint8Array(256);
-            for(let i=0; i<256; i++) { let val = factor * (i - 128) + 128 + brightness; lut[i] = Math.max(0, Math.min(255, val)); }
+        function endInteraction() {
+            isDrawing = false; lastBrushPos = null; activeDragTarget = null;
+            mainCanvas.style.cursor = (currentTool === 'clicker') ? 'crosshair' : 'cell';
+            drawWorkspace();
+        }
+        mainCanvas.addEventListener('pointerup', endInteraction);
+        mainCanvas.addEventListener('pointercancel', endInteraction);
+        mainCanvas.addEventListener('pointerleave', endInteraction);
 
-            for (let i = 0; i < data.length; i += 4) {
-                const pixelIndex = i / 4;
-                const r = data[i], g = data[i + 1], b = data[i + 2];
-                const adjR = lut[r], adjG = lut[g], adjB = lut[b];
-
-                if(maskBuffer[pixelIndex] === 1) { 
-                    data[i] = newRgb[0]; data[i+1] = newRgb[1]; data[i+2] = newRgb[2]; 
-                } else if (maskBuffer[pixelIndex] === 2) { 
-                    data[i] = adjR; data[i+1] = adjG; data[i+2] = adjB; 
-                } else { 
-                    let minDistance = 9999;
-                    for (let tc of targetColors) {
-                        const dist = Math.sqrt((r - tc[0])**2 + (g - tc[1])**2 + (b - tc[2])**2);
-                        if (dist < minDistance) minDistance = dist;
-                    }
-                    if (minDistance <= tolerance) {
-                        data[i] = newRgb[0]; data[i+1] = newRgb[1]; data[i+2] = newRgb[2];
-                    } else if (feather > 0 && minDistance <= tolerance + feather) {
-                        const mix = (minDistance - tolerance) / feather;
-                        data[i] = Math.round(adjR * mix + newRgb[0] * (1 - mix));
-                        data[i+1] = Math.round(adjG * mix + newRgb[1] * (1 - mix));
-                        data[i+2] = Math.round(adjB * mix + newRgb[2] * (1 - mix));
-                    } else {
-                        data[i] = adjR; data[i+1] = adjG; data[i+2] = adjB;
+        function paintCircle(cx, cy, radius, val) {
+            cx = Math.round(cx); cy = Math.round(cy);
+            const w = mainCanvas.width, h = mainCanvas.height;
+            for (let i = -radius; i <= radius; i++) {
+                for (let j = -radius; j <= radius; j++) {
+                    if (i * i + j * j <= radius * radius) {
+                        const px = cx + i, py = cy + j;
+                        if (px >= 0 && px < w && py >= 0 && py < h) maskBuffer[py * w + px] = val;
                     }
                 }
             }
-            cachedBgData = currentImageData;
-            drawWorkspace();
         }
 
-        function drawWorkspace() {
-            if(!cachedBgData) return;
-            ctx.putImageData(cachedBgData, 0, 0);
-
-            if(watermarkImg) ctx.drawImage(watermarkImg, wmX, wmY, wmW, wmH);
-            
-            customTexts.forEach((t, index) => {
-                ctx.font = `bold ${t.size}px Arial`; ctx.fillStyle = t.color;
-                ctx.fillText(t.text, t.x, t.y);
-                
-                if(activeDragTarget && activeDragTarget.type === 'text' && activeDragTarget.index === index) {
-                    ctx.strokeStyle = 'rgba(212, 175, 55, 0.8)'; ctx.lineWidth = 2;
-                    let tw = ctx.measureText(t.text).width;
-                    ctx.strokeRect(t.x - 5, t.y - t.size, tw + 10, t.size + 10);
+        function applyBrushOrEraser(x, y) {
+            const radius = parseInt(document.getElementById('brushSize').value) * (isHDActive && currentMode === 'image' ? 2 : 1);
+            const val = currentTool === 'brush' ? 1 : 2;
+            if (lastBrushPos) {
+                const dist = Math.hypot(x - lastBrushPos.x, y - lastBrushPos.y);
+                const steps = Math.max(1, Math.ceil(dist / Math.max(1, radius / 2)));
+                for (let k = 1; k <= steps; k++) {
+                    paintCircle(lastBrushPos.x + (x - lastBrushPos.x) * k / steps,
+                                lastBrushPos.y + (y - lastBrushPos.y) * k / steps, radius, val);
                 }
-            });
+            } else {
+                paintCircle(x, y, radius, val);
+            }
+            lastBrushPos = { x, y };
+            scheduleBgUpdate();
         }
 
-        document.getElementById('resetBtn').addEventListener('click', () => {
-            currentMode = ''; baseOriginalImageData1x = null; baseOriginalImageData = null;   
-            originalImageData = null; cachedBgData = null; pdfDocument = null;
-            targetColors = []; maskBuffer = null; currentTool = 'clicker';
-            isDrawing = false; zoomScale = 1.0; isHDActive = false; 
-            watermarkImg = null; customTexts = []; activeDragTarget = null; 
+        // ================= SLIDERS =================
+        ['toleranceSlider', 'newColorPicker', 'featherSlider', 'brightSlider', 'contrastSlider'].forEach(id => {
+            document.getElementById(id).addEventListener('input', scheduleBgUpdate);
+        });
+        document.getElementById('stepSlider').addEventListener('change', () => { buildSmartMask(); scheduleBgUpdate(); });
+        document.getElementById('keepShading').addEventListener('change', scheduleBgUpdate);
 
+        // ================= RESET =================
+        document.getElementById('resetBtn').addEventListener('click', () => {
+            currentMode = ''; baseOriginalImageData1x = null; baseOriginalImageData = null;
+            originalImageData = null; cachedBgData = null; pdfDocument = null;
+            maskBuffer = null; currentTool = 'clicker'; zoomScale = 1.0;
+            clearEditState();
+
+            document.querySelector('.tool-btn.active').classList.remove('active');
+            document.getElementById('toolClicker').classList.add('active');
+            document.getElementById('zoomLevel').innerText = '100%';
             document.getElementById('uploadFile').value = '';
             document.getElementById('wmUpload').value = '';
             document.getElementById('textInput').value = '';
-            document.getElementById('instructionText').innerHTML = "👆 Click to replace bg. <b>Drag Text & Logo</b> to move them.";
-
-            const hdBtn = document.getElementById('makeHDBtn');
-            hdBtn.innerText = "⚡ Turn ON HD Quality";
-            hdBtn.style.background = "linear-gradient(135deg, #3b82f6, #8b5cf6)";
-            hdBtn.style.pointerEvents = "auto";
+            instructionText.innerHTML = "👆 Click to replace bg. <b>Drag Text & Logo</b> to move them.";
 
             document.getElementById('workspace').style.display = "none";
             innerContainer.style.display = "none";
@@ -709,94 +912,83 @@
             document.getElementById('resetBtn').style.display = "none";
             document.getElementById('processPdfBtn').style.display = "none";
             document.getElementById('downloadImgBtn').style.display = "none";
-
             document.getElementById('welcomeScreen').style.display = "grid";
             document.getElementById('mainUploadZone').style.display = "block";
 
             ctx.clearRect(0, 0, mainCanvas.width, mainCanvas.height);
         });
 
+        // ================= PDF EXPORT =================
         document.getElementById('processPdfBtn').addEventListener('click', async () => {
-            if (!pdfDocument || (targetColors.length === 0 && !maskBuffer.includes(1))) return;
+            if (!pdfDocument) return;
             document.getElementById('progressContainer').style.display = "block";
             const progressText = document.getElementById('progressText');
-            
+
             const { jsPDF } = window.jspdf;
             let finalPdf = null;
-            const newRgb = hexToRgb(document.getElementById('newColorPicker').value);
-            const tolerance = parseInt(document.getElementById('toleranceSlider').value);
-            const feather = parseInt(document.getElementById('featherSlider').value);
-            const brightness = parseInt(document.getElementById('brightSlider').value);
-            const contrast = parseInt(document.getElementById('contrastSlider').value);
-            
-            const factor = (259 * (contrast + 255)) / (255 * (259 - contrast));
-            const lut = new Uint8Array(256);
-            for(let i=0; i<256; i++) { let val = factor * (i - 128) + 128 + brightness; lut[i] = Math.max(0, Math.min(255, val)); }
+            const s = getSettings();
 
             try {
                 for (let i = 1; i <= pdfDocument.numPages; i++) {
                     progressText.innerText = `Pro Engine Processing... Page ${i} of ${pdfDocument.numPages} ⏳`;
-                    
+                    await new Promise(r => setTimeout(r, 0)); // UI update hone do
+
                     const hiddenCanvas = document.createElement('canvas');
-                    const hiddenCtx = hiddenCanvas.getContext('2d');
+                    const hiddenCtx = hiddenCanvas.getContext('2d', { willReadFrequently: true });
                     const page = await pdfDocument.getPage(i);
-                    const viewport = page.getViewport({ scale: 3.0 }); 
+                    const viewport = page.getViewport({ scale: 3.0 });
                     hiddenCanvas.width = viewport.width; hiddenCanvas.height = viewport.height;
                     await page.render({ canvasContext: hiddenCtx, viewport: viewport }).promise;
-                    
+
                     const imageData = hiddenCtx.getImageData(0, 0, hiddenCanvas.width, hiddenCanvas.height);
                     const data = imageData.data;
-                    
-                    for (let j = 0; j < data.length; j += 4) {
-                        const r = data[j], g = data[j+1], b = data[j+2];
-                        const pixelIndex = j / 4;
-                        const adjR = lut[r], adjG = lut[g], adjB = lut[b];
+                    const W = hiddenCanvas.width, H = hiddenCanvas.height;
+                    const mW = mainCanvas.width, mH = mainCanvas.height;
+                    const sx = mW / W, sy = mH / H;
 
-                        if(i === 1 && maskBuffer[pixelIndex] === 1) {
-                            data[j] = newRgb[0]; data[j+1] = newRgb[1]; data[j+2] = newRgb[2];
-                        } else if (i === 1 && maskBuffer[pixelIndex] === 2) {
-                            data[j] = adjR; data[j+1] = adjG; data[j+2] = adjB;
-                        } else {
-                            let minDistance = 9999;
-                            for (let tc of targetColors) {
-                                const dist = Math.sqrt((r - tc[0])**2 + (g - tc[1])**2 + (b - tc[2])**2);
-                                if (dist < minDistance) minDistance = dist;
-                            }
-                            if (minDistance <= tolerance) {
-                                data[j] = newRgb[0]; data[j+1] = newRgb[1]; data[j+2] = newRgb[2];
-                            } else if (feather > 0 && minDistance <= tolerance + feather) {
-                                const mix = (minDistance - tolerance) / feather;
-                                data[j] = Math.round(adjR * mix + newRgb[0] * (1 - mix));
-                                data[j+1] = Math.round(adjG * mix + newRgb[1] * (1 - mix));
-                                data[j+2] = Math.round(adjB * mix + newRgb[2] * (1 - mix));
-                            } else {
-                                data[j] = adjR; data[j+1] = adjG; data[j+2] = adjB;
-                            }
+                    for (let y = 0; y < H; y++) {
+                        const my = Math.min(mH - 1, Math.floor(y * sy));
+                        for (let x = 0; x < W; x++) {
+                            const j = (y * W + x) * 4;
+                            // Brush aur Smart Fill sirf page 1 par, sahi scale ke saath
+                            const mIdx = my * mW + Math.min(mW - 1, Math.floor(x * sx));
+                            const m  = (i === 1) ? maskBuffer[mIdx] : 0;
+                            const sm = (i === 1 && smartMask) ? smartMask[mIdx] : 0;
+                            recolorPixel(data, j, m, s, sm);
                         }
                     }
                     hiddenCtx.putImageData(imageData, 0, 0);
 
                     const scalePDF = hiddenCanvas.width / mainCanvas.width;
-                    if(watermarkImg) { hiddenCtx.drawImage(watermarkImg, wmX * scalePDF, wmY * scalePDF, wmW * scalePDF, wmH * scalePDF); }
+                    if (watermarkImg) hiddenCtx.drawImage(watermarkImg, wmX * scalePDF, wmY * scalePDF, wmW * scalePDF, wmH * scalePDF);
                     customTexts.forEach(t => {
                         hiddenCtx.font = `bold ${t.size * scalePDF}px Arial`; hiddenCtx.fillStyle = t.color;
                         hiddenCtx.fillText(t.text, t.x * scalePDF, t.y * scalePDF);
                     });
-                    
-                    const imgData = hiddenCanvas.toDataURL('image/jpeg', 0.95); 
-                    if (i === 1) finalPdf = new jsPDF(viewport.width > viewport.height ? 'l' : 'p', 'px', [viewport.width, viewport.height]);
-                    else finalPdf.addPage([viewport.width, viewport.height], viewport.width > viewport.height ? 'l' : 'p');
+
+                    const imgData = hiddenCanvas.toDataURL('image/jpeg', 0.95);
+                    const orient = viewport.width > viewport.height ? 'l' : 'p';
+                    if (i === 1) finalPdf = new jsPDF(orient, 'px', [viewport.width, viewport.height]);
+                    else finalPdf.addPage([viewport.width, viewport.height], orient);
                     finalPdf.addImage(imgData, 'JPEG', 0, 0, viewport.width, viewport.height);
                 }
                 progressText.innerText = "🎉 HD PDF Ready! Downloading...";
                 finalPdf.save('Premium-Export.pdf');
-            } catch (error) { alert("Error! PDF is too large, please refresh and try again."); } 
-            finally { document.getElementById('progressContainer').style.display = "none"; }
+            } catch (error) {
+                console.error(error);
+                alert("Error! PDF is too large, please refresh and try again.");
+            } finally {
+                document.getElementById('progressContainer').style.display = "none";
+            }
         });
 
+        // ================= IMAGE DOWNLOAD =================
         document.getElementById('downloadImgBtn').addEventListener('click', () => {
-            const link = document.createElement('a'); link.download = 'Premium-Export-Image.png';
-            link.href = mainCanvas.toDataURL('image/png', 1.0); link.click();
+            activeDragTarget = null; drawWorkspace(); // selection box export mein na aaye
+            const link = document.createElement('a');
+            link.download = 'Premium-Export-Image.png';
+            link.href = mainCanvas.toDataURL('image/png', 1.0);
+            link.click();
         });
     </script>
 </body>
